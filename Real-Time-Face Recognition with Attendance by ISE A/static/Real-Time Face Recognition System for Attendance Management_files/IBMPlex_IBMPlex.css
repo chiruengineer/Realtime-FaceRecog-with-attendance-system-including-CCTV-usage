@@ -1,0 +1,233 @@
+
+
+/* IBM Plex Sans */
+
+.IBMPlex_IBMPlex .h1 {
+    font-family: "IBM Plex Sans";
+    font-size: 148px;
+    font-weight: 300;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+}
+
+.IBMPlex_IBMPlex .h2 {
+    font-family: "IBM Plex Sans";
+    font-size: 120px;
+    font-weight: 300;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+}
+
+.IBMPlex_IBMPlex .h3 {
+    font-family: "IBM Plex Sans";
+    font-size: 96px;
+    font-weight: 300;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+}
+
+.IBMPlex_IBMPlex .h4 {
+    font-family: "IBM Plex Sans";
+    font-size: 72px;
+    font-weight: 300;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.14;
+    letter-spacing: -0.02em;
+}
+
+.IBMPlex_IBMPlex .h5 {
+    font-family: "IBM Plex Sans";
+    font-size: 56px;
+    font-weight: 300;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.26;
+    letter-spacing: -0.02em;
+}
+
+.IBMPlex_IBMPlex .h6 {
+    font-family: "IBM Plex Sans";
+    font-size: 44px;
+    font-weight: 300;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.32;
+    letter-spacing: -0.02em;
+}
+
+.IBMPlex_IBMPlex .h7 {
+    font-family: "IBM Plex Sans";
+    font-size: 36px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.36;
+    letter-spacing: -0.02em;
+}
+
+.IBMPlex_IBMPlex .h8 {
+    font-family: "IBM Plex Sans";
+    font-size: 28px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.4;
+    letter-spacing: -0.02em;
+}
+
+.IBMPlex_IBMPlex .h9 {
+    font-family: "IBM Plex Sans";
+    font-size: 24px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.59;
+    letter-spacing: -0.02em;
+}
+
+.IBMPlex_IBMPlex .h10 {
+    font-family: "IBM Plex Sans";
+    font-size: 20px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.64;
+    letter-spacing: -0.02em;
+}
+
+.IBMPlex_IBMPlex .h11 {
+    font-family: "IBM Plex Sans";
+    font-size: 16px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.7;
+    letter-spacing: -0.02em;
+}
+
+.IBMPlex_IBMPlex .p1 {
+    font-family: "IBM Plex Sans";
+    font-size: 44px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.36;
+    letter-spacing: -0.01em;
+}
+
+.IBMPlex_IBMPlex .p2 {
+    font-family: "IBM Plex Sans";
+    font-size: 36px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+}
+
+.IBMPlex_IBMPlex .p3 {
+    font-family: "IBM Plex Sans";
+    font-size: 32px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.44;
+    letter-spacing: -0.01em;
+}
+
+.IBMPlex_IBMPlex .p4 {
+    font-family: "IBM Plex Sans";
+    font-size: 28px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.48;
+    letter-spacing: -0.01em;
+}
+
+.IBMPlex_IBMPlex .p5 {
+    font-family: "IBM Plex Sans";
+    font-size: 24px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.52;
+    letter-spacing: -0.01em;
+}
+
+.IBMPlex_IBMPlex .p6 {
+    font-family: "IBM Plex Sans";
+    font-size: 22px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.56;
+    letter-spacing: -0.01em;
+}
+
+.IBMPlex_IBMPlex .p7 {
+    font-family: "IBM Plex Sans";
+    font-size: 20px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+}
+
+.IBMPlex_IBMPlex .p8 {
+    font-family: "IBM Plex Sans";
+    font-size: 18px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.64;
+    letter-spacing: -0.01em;
+}
+
+.IBMPlex_IBMPlex .p9 {
+    font-family: "IBM Plex Sans";
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.68;
+    letter-spacing: -0.01em;
+}
+
+.IBMPlex_IBMPlex .n1 {
+    font-family: Archivo;
+    font-size: 54px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1;
+    letter-spacing: 0em;
+}
+
+.IBMPlex_IBMPlex .hl1 {
+    font-family: "IBM Plex Sans";
+    font-weight: 700;
+    font-stretch: normal;
+    font-style: italic;
+    line-height: 1.26;
+    letter-spacing: -0.02em;
+}
+
+.IBMPlex_IBMPlex .hl2 {
+    font-family: "IBM Plex Sans";
+    font-weight: 700;
+    font-stretch: normal;
+    font-style: italic;
+    line-height: 1.62;
+    letter-spacing: -0.01em;
+}
+
+

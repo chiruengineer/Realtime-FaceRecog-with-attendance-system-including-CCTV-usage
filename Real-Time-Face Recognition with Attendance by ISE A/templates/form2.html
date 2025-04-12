@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Attendance Database</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <section id="page">
+        <div class="container">
+            <h1 class="text-center" style="color:black"><strong>Today's Attendance</strong></h1>
+            <br><br><br>
+            <h3 style="font-style:verdana;">Details of student present today:</h3>
+            <br><br><br>
+            <table class="table table-bordered">
+                <thead>
+                    <td>Name</td>
+                    <td>Time</td>
+                    <td>Date</td>
+                </thead>
+                {% for row in rows %}
+                    <tr>
+                        <td>{{row["NAME"]}}</td>
+                        <td>{{row["Time"]}}</td>
+                        <td>{{row["Date"]}}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+            <br><br>
+            <form action="/whole" method="post">
+                <button class="btn btn-primary">View Whole Database</button>
+            </form>
+            <br><br>
+            <form action="/dashboard" method="post">
+                <button class="btn btn-primary">View Attendance Dashboard</button>
+            </form>
+            <br><br>
+            <form action="/" method="GET">
+                <button class="btn btn-primary">Go back to home page</button>
+            </form>
+            <br><br>
+
+            <!-- Reset Data Button -->
+            <button class="btn btn-danger" id="reset-btn">Reset All Data</button>
+            <br><br>
+
+            <!-- Ask for Password Form (Initially hidden) -->
+            <div id="password-form" style="display:none;">
+                <form id="verify-password-form">
+                    <div class="form-group">
+                        <label for="password">Enter Admin Password:</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-warning">Verify Password</button>
+                    <button type="button" class="btn btn-default" id="cancel-reset">Cancel</button>
+                </form>
+            </div>
+
+            <br><br>
+            <!-- Display the result message here -->
+            <div id="result-message"></div>
+        </div>
+    </section>
+
+    <script>
+        // Show password form when the reset button is clicked
+        document.getElementById("reset-btn").addEventListener("click", function(event) {
+            event.preventDefault();
+            document.getElementById("password-form").style.display = "block";
+        });
+
+        // Cancel reset and hide the password form
+        document.getElementById("cancel-reset").addEventListener("click", function() {
+            document.getElementById("password-form").style.display = "none";
+        });
+
+        // Handle password verification and reset data with AJAX
+        document.getElementById("verify-password-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            var password = document.getElementById("password").value;
+            
+            // Send the password to the server using AJAX
+            $.ajax({
+                type: "POST",
+                url: "/reset",
+                data: {password: password},
+                success: function(response) {
+                    if (response.status === "success") {
+                        // Display success message
+                        document.getElementById("result-message").innerHTML = 
+                            '<div class="alert alert-success">' + response.message + '</div>';
+                    } else {
+                        // Display error message
+                        document.getElementById("result-message").innerHTML = 
+                            '<div class="alert alert-danger">' + response.message + '</div>';
+                    }
+
+                    // Hide the password form after action
+                    document.getElementById("password-form").style.display = "none";
+                },
+                error: function(error) {
+                    console.log("Error:", error);
+                    document.getElementById("result-message").innerHTML = 
+                        '<div class="alert alert-danger">An unexpected error occurred.</div>';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

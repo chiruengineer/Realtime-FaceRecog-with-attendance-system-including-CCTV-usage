@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Settings</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .alert {
+            margin-bottom: 20px;
+        }
+        .btn-primary {
+            background-color: #0c5460;
+            border-color: #0c5460;
+        }
+        .btn-primary:hover {
+            background-color: #0a4b53;
+            border-color: #0a4b53;
+        }
+        .camera-type-options {
+            display: none;
+        }
+        .camera-type-options.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="mb-4">Camera Settings</h2>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('camera_settings') }}">
+            <div class="form-group">
+                <label for="camera_type">Camera Type:</label>
+                <select class="form-control" id="camera_type" name="camera_type" required>
+                    <option value="webcam">Webcam</option>
+                    <option value="ip_camera">IP Camera/CCTV</option>
+                </select>
+            </div>
+
+            <div id="ip_camera_options" class="camera-type-options">
+                <div class="form-group">
+                    <label for="protocol">Protocol:</label>
+                    <select class="form-control" id="protocol" name="protocol">
+                        <option value="rtsp">RTSP</option>
+                        <option value="http">HTTP</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="ip_address">IP Address:</label>
+                    <input type="text" class="form-control" id="ip_address" name="ip_address" 
+                           placeholder="e.g., 192.168.1.100">
+                </div>
+
+                <div class="form-group">
+                    <label for="port">Port:</label>
+                    <input type="text" class="form-control" id="port" name="port" 
+                           placeholder="e.g., 554 for RTSP, 80 for HTTP">
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Username (optional):</label>
+                    <input type="text" class="form-control" id="username" name="username" 
+                           placeholder="Camera username">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password (optional):</label>
+                    <input type="password" class="form-control" id="password" name="password" 
+                           placeholder="Camera password">
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save Settings</button>
+            <a href="/" class="btn btn-secondary">Back to Home</a>
+        </form>
+
+        <div class="mt-4">
+            <h4>Current Camera Configuration:</h4>
+            <pre>{{ config | tojson(indent=2) if config else 'No configuration found' }}</pre>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('camera_type').addEventListener('change', function() {
+            const ipCameraOptions = document.getElementById('ip_camera_options');
+            if (this.value === 'ip_camera') {
+                ipCameraOptions.classList.add('active');
+            } else {
+                ipCameraOptions.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
+

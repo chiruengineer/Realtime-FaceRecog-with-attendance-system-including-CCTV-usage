@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        /* General styling for the page */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            background-color: #f7f7f7;
+            overflow-y: auto; /* Enable vertical scrolling */
+        }
+
+        .container {
+            text-align: center;
+            width: 100%;
+            max-width: 1000px;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow: auto; /* Ensure scrolling inside the container */
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h2, h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .graph-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            justify-items: center;
+            margin-bottom: 30px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Fullscreen modal styling */
+        .fullscreen-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .fullscreen-img {
+            max-width: 90%;
+            max-height: 80vh;
+            object-fit: contain;
+            margin: 10px auto;
+            display: block;
+        }
+
+        /* Exit button */
+        .exit-button {
+            background-color: #42A5F5;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 20px;
+        }
+
+        .exit-button:hover {
+            background-color: #1E88E5;
+        }
+
+        /* Back to Menu button styling */
+        .back-to-menu {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #FF5733;
+        }
+
+        /* Styling for small screens */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .graph-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dashboard</h1>
+
+        <button class="back-to-menu" onclick="window.location.href='/';">Back to Menu</button>
+
+        <div class="section">
+            <h2>Graphs for All Attendance</h2>
+            <div class="graph-grid">
+                {% if graph1 %}
+                    <div>
+                        <h3>Attendance Count Per Person</h3>
+                        <img src="{{ graph1 }}" alt="Attendance Count Per Person" onclick="showFullScreen('{{ graph1 }}')">
+                    </div>
+                {% endif %}
+                {% if graph2 %}
+                    <div>
+                        <h3>Attendance Trend Over Time</h3>
+                        <img src="{{ graph2 }}" alt="Attendance Trend Over Time" onclick="showFullScreen('{{ graph2 }}')">
+                    </div>
+                {% endif %}
+                {% if treemap %}
+                    <div>
+                        <h3>Attendance Distribution (Treemap)</h3>
+                        <img src="{{ treemap }}" alt="Attendance Distribution" onclick="showFullScreen('{{ treemap }}')">
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Today's Attendance</h2>
+            <div class="graph-grid">
+                {% if pie_chart %}
+                    <div>
+                        <h3>Today's Attendance (Present vs Absent)</h3>
+                        <img src="{{ pie_chart }}" alt="Today's Attendance" onclick="showFullScreen('{{ pie_chart }}')">
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Fullscreen Image Modal -->
+        <div id="fullscreen-container" class="fullscreen-modal">
+            <img id="fullscreen-img" class="fullscreen-img" src="" alt="Fullscreen Image">
+            <button class="exit-button" onclick="exitFullScreen()">Exit Full Screen</button>
+        </div>
+    </div>
+
+    <script>
+        // Function to show the image in fullscreen mode
+        function showFullScreen(imageSrc) {
+            document.getElementById('fullscreen-container').style.display = 'flex';
+            document.getElementById('fullscreen-img').src = imageSrc;
+            document.body.style.overflow = 'hidden';  // Disable scrolling when in fullscreen mode
+        }
+
+        // Function to exit fullscreen mode
+        function exitFullScreen() {
+            document.getElementById('fullscreen-container').style.display = 'none';
+            document.body.style.overflow = 'auto';  // Enable scrolling again after exiting fullscreen
+        }
+
+        // ESC key functionality to close fullscreen
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                exitFullScreen();
+            }
+        });
+    </script>
+</body>
+</html>

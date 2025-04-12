@@ -1,0 +1,89 @@
+function pptxmood(objMoodData) {
+    let parentDiv = objMoodData.parentDiv;
+    let moodParentDiv;
+    let isStart = true;
+
+    pptxmood.prototype.updateAnimationType = function (doAnimation) {
+        playMoodTransition = doAnimation;
+    };
+
+    pptxmood.prototype.createMood = function () {
+        if (parentDiv) {
+            if (objMoodData.updateProgress) objMoodData.updateProgress(true, "moodjs");
+            clearParentChilds(parentDiv);
+
+            // Creating main parent for moods all layouts.
+            moodParentDiv = document.createElement("div");
+            moodParentDiv.id = "moodParentDiv";
+            moodParentDiv.className = "commonLayout multiColor moodParentDiv";
+
+            // Creating style tag for transition and slide animation
+            let style = document.createElement("style");
+            style.id = "CssAnimStyle";
+            moodParentDiv.appendChild(style);
+
+            parentDiv.appendChild(moodParentDiv);
+
+            // Slide main parent
+            let moodSlideParent = document.createElement("div");
+            moodSlideParent.id = "slideParent";
+            moodSlideParent.className = "moodSlideParent";
+            moodParentDiv.appendChild(moodSlideParent);
+
+            commonImageLoadTransition(objMoodData.animationJSON, moodParentDiv, this.imageLoadCallbackCommon, objMoodData);
+        }
+    };
+
+    pptxmood.prototype.imageLoadCallbackCommon = function () {
+        if (objMoodData.updateProgress) objMoodData.updateProgress(false, "moodjs");
+        objMoodData.callback(objMoodData.slideId);
+    };
+
+    pptxmood.prototype.callStartAnimation = function (slideContent, slideIndex, callback, slideAddCompleteCallback, isPrevious, transitionEndCallback) {
+        parentDiv.classList.add("widgetViewPaused");
+        this.introDelay = 0;
+        slideContent.setAttribute("notransition", "true");
+        this.addSlideInMoodParent(slideContent, slideIndex, callback, slideAddCompleteCallback, isPrevious, transitionEndCallback);
+    };
+
+    pptxmood.prototype.addSlideInMoodParent = function (slideContent, slideIndex, callback, slideAddCompleteCallback, isPrevious, transitionEndCallback) {
+        let slideParent = moodParentDiv.querySelector("[id='slideParent']");
+
+        let firstChild = slideParent.children ? slideParent.children[0] : null;
+        let doAnimAfterObserverInstance = this.doAnimAfterObserver.bind(this);
+        let observer = new MutationObserver(function () {
+            doAnimAfterObserverInstance(slideContent, slideAddCompleteCallback, callback, parentDiv, firstChild, transitionEndCallback);
+            observer.disconnect();
+        });
+        observer.observe(slideParent, {
+            subtree: true,
+            childList: true,
+        });
+
+        slideParent.appendChild(slideContent);
+    };
+
+    pptxmood.prototype.doAnimAfterObserver = function (slideContent, slideAddCompleteCallback, callback, parentDiv, firstChild, transitionEndCallback) {
+        slideAddCompleteCallback ? slideAddCompleteCallback() : "";
+        callback ? callback(0) : "";
+
+        slideContent.style.opacity = 1;
+        slideContent.parentElement.style.opacity = 1;
+
+        parentDiv.classList.remove("widgetViewPaused");
+        if (firstChild) firstChild.parentElement.removeChild(firstChild);
+        transitionEndCallback ? transitionEndCallback() : "";
+        isStart = false;
+    };
+
+    pptxmood.prototype.getCurrentSlide = function (strSlideID) {
+        let slideParent = moodParentDiv?.querySelector("[id='slideParent']");
+        let returnSlide = null;
+        returnSlide = slideParent?.querySelector("[id='" + strSlideID + "']");
+        return returnSlide;
+    };
+    pptxmood.prototype.getMoodTransitionName = function () {
+        //Setting up current tranition name here for saravanan bro for animation related things in moodutil
+        return "default";
+    };
+}

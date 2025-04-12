@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Captured Image</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa; /* Light grey background */
+            padding-top: 50px; /* Top padding to avoid overlap with navbar */
+        }
+        #page {
+            position: relative;
+            height: 100vh; /* Full viewport height */
+            background: url("{{url_for('static',filename='captured.gif')}}") no-repeat center center/cover;
+            background-size: 95%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #ff5733; /* Orangered text color */
+            font-size: 24px;
+        }
+        .container {
+            max-width: 600px; /* Limiting width for better readability */
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+            padding: 30px;
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Soft shadow */
+        }
+        h1 {
+            font-size: 36px;
+            margin-bottom: 30px;
+        }
+        .btn {
+            padding: 10px 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+<section id="page">
+    <div class="container">
+        <h1><strong>Your image has been captured!</strong></h1>
+        <form action="/" method="GET">
+            <button class="btn btn-success">Go to main Page</button>
+        </form>
+    </div>
+</section>
+
+</body>
+</html>
