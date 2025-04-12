@@ -1,0 +1,214 @@
+function grandeur(objMoodData) {
+    let widgetView = objMoodData.parentDiv;
+    let moodParentDiv;
+    let isStart = true;
+    // Mood transition with animation or without animation key from objMood data
+    let playMoodTransition = objMoodData.playAnimation != null && objMoodData.playAnimation != undefined ? objMoodData.playAnimation : true;
+    let animation = objMoodData.animationJSON.filter((obj) => obj.id == "CssMoodData")[0].data;
+
+    //------------------------------------------------------//
+    let transitionType = "moodshapebased";
+    let loopArray = ["center", "lefttoright", "righttoleft", "toptobottom", "bottomtotop", "zoomin", "zoomout", "zoominout", "zoomoutin"];
+    // "moodshapebased" - based on mood based bg shapes
+    // "single" - only one animation plays full mood - bottomtotop animation will play default - if need some other animation change in below "transName"
+    // "loop" - looping 0-1-2-3-0-1-2-3-0
+    // "looparray" - ["animation1","animation2"] - depends on loopcount and loopArray
+    //------------------------------------------------------//
+    let transName = "diagonaltopright"; // center,lefttoright,righttoleft,toptobottom,bottomtotop,zoomin,zoomout,zoominout,zoomoutin,fadein, diagonaltopleft, diagonaltopright, diagonalbottomleft, diagonalbottomright
+    let originalTransName = transName;
+    let tempTransName = "";
+    //------------------------------------------------------//
+    let loopCount = loopArray.length;
+    // let localIndex = transitionType == "looparray" ? -1 : 0;
+    let localIndex = -1;
+    // previous slide type
+    let previousSlideType = "";
+
+    grandeur.prototype.createMood = function() {
+        if (widgetView) {
+            if (objMoodData.updateProgress) objMoodData.updateProgress(true, "moodjs");
+            clearParentChilds(widgetView);
+
+            // Creating main parent for moods all layouts.
+            moodParentDiv = document.createElement("div");
+            moodParentDiv.id = "moodParentDiv";
+            moodParentDiv.className = "moodParentDiv";
+            moodParentDiv.style.pointerEvents = "none";
+
+            // Creating style tag for transition and slide animation
+            let style = document.createElement("style");
+            style.id = "CssAnimStyle";
+            moodParentDiv.appendChild(style);
+
+            widgetView.appendChild(moodParentDiv);
+
+            this.createSlide(0);
+            this.createSlide(1);
+
+            commonImageLoadTransition(objMoodData.animationJSON, moodParentDiv, this.imageLoadCallbackCommon, objMoodData);
+        }
+    };
+
+    grandeur.prototype.updateAnimationType = function (doAnimation) {
+        playMoodTransition = doAnimation;
+    };
+
+    grandeur.prototype.imageLoadCallbackCommon = function () {
+        if (objMoodData.updateProgress) objMoodData.updateProgress(false, "moodjs");
+        objMoodData.callback(objMoodData.slideId);
+    };
+
+    grandeur.prototype.createSlide = function(slideIndex) {
+        // Slide main parent
+        let moodSlideParent = document.createElement("div");
+        moodSlideParent.id = "slide" + slideIndex + "Parent";
+        moodSlideParent.className = "moodSlideParent";
+        moodParentDiv.appendChild(moodSlideParent);
+        moodSlideParent.style.opacity = 0;
+
+        // Slide content parent
+        let slideContentParentDiv = document.createElement("div");
+        slideContentParentDiv.id = "SLIDE" + slideIndex;
+        slideContentParentDiv.setAttribute("data-layer-name", "SLIDE" + slideIndex);
+        slideContentParentDiv.className = "moodSlideContentParentDiv";
+        moodSlideParent.appendChild(slideContentParentDiv);
+    };
+
+    grandeur.prototype.callStartAnimation = function(slideContent, slideIndex, callback, slideAddCompleteCallback, isPrevious, transitionEndCallback) {
+        widgetView.classList.add("widgetViewPaused");
+
+        this.slideIndex = slideIndex;
+        this.isPrevious = isPrevious;
+        this.slideContent = slideContent;
+        this.transitionEndCallback = transitionEndCallback;
+
+        let pos = slideIndex % 2 ? 1 : 0;
+
+        // Transition based on Types
+        let curentSlideType = getSlideType(slideContent);
+        // if (curentSlideType != null && previousSlideType != null && previousSlideType == curentSlideType) transName = "fadein";
+        if (transitionType == "loop") {
+            let arrData = getLayoutNameForTransition(localIndex);
+            transName = arrData[0];
+            localIndex = arrData[1];
+        } else if (transitionType == "looparray") {
+            let arrData = getLayoutNameForLoopArrayTransition(localIndex, isPrevious, loopCount, loopArray);
+            transName = arrData[0];
+            localIndex = arrData[1];
+        } else if (transitionType == "moodshapebased") {
+            transName = getLayoutNameForMoodShapeTransition(slideContent, animation);
+            localIndex = localIndex + 1;
+        } else if (transitionType == "single") transName = originalTransName;
+
+        if (previousSlideType != curentSlideType) {
+            let arrReverseData = getLayoutNameForReverseTransition(transitionType, transName, isPrevious, tempTransName);
+            transName = arrReverseData[0];
+            tempTransName = arrReverseData[1];
+        }
+
+        previousSlideType = curentSlideType;
+
+        // Getting show/hide delay of asset/transtion from Mood Json
+        this.showgraphicDelay = playMoodTransition == false || isStart ? 0 : animation[transName].showgraphic;
+        this.hidegraphicDelay = playMoodTransition == false ? 0 : animation[transName].hidegraphic;
+
+        // Hide animation delay
+        objMoodData.transitionDelay ? objMoodData.transitionDelay(this.hidegraphicDelay * 1000) : "";
+
+        let slide0Content = moodParentDiv.querySelector("[id='SLIDE" + pos + "']");
+        let doAnimAfterObserverInstance = this.doAnimAfterObserver.bind(this);
+        let observer = new MutationObserver(function() {
+            doAnimAfterObserverInstance(isPrevious, slideAddCompleteCallback, callback, slideIndex);
+            observer.disconnect();
+        });
+        observer.observe(slide0Content, {
+            subtree: true,
+            childList: true,
+        });
+        if (slide0Content) {
+            // Adding slide content to mood slide container
+            clearParentChilds(slide0Content);
+            slide0Content.appendChild(this.slideContent);
+        }
+    };
+
+    grandeur.prototype.doAnimAfterObserver = function(isPrevious, slideAddCompleteCallback, callback, slideIndex) {
+        //Coverpage Intro lottie animation
+        this.introDelay = 0;
+        if (isPrevious != true && isStart == true && slideIndex == 0) {
+            let objData = createIntroForCoverPage(moodParentDiv, objMoodData.animationJSON, objMoodData.playAnimation, "", this.slideContent, objMoodData, "commonLayout " + objMoodData.moodData.name);
+            if (objData) this.objData = objData;
+        }
+
+        this.introDelay = this.objData?.introdelay && isStart == true ? this.objData.introdelay : 0;
+        this.slideContent.setAttribute("data-transdelay", this.showgraphicDelay );
+        this.slideContent.style.setProperty("--transdelay", this.showgraphicDelay + "s");
+        slideAddCompleteCallback ? slideAddCompleteCallback() : "";
+        callback ? callback(0) : "";
+    };
+
+    grandeur.prototype.doTransitionAnimation = function() {
+        if (this.objData && this.objData.lottieAnimation && isStart) {if (objMoodData.updateIntroVideoEvent && !objMoodData.hasIntroVideo) objMoodData.updateIntroVideoEvent(true);
+
+            this.objData.lottieAnimation.playSegments([0, this.objData.endFrame ? this.objData.endFrame : 0], true);
+
+            if (!objMoodData.hasIntroVideo)
+                this.objData.lottieAnimation.addEventListener("complete", () => {
+                    if (objMoodData.updateIntroVideoEvent) objMoodData.updateIntroVideoEvent(false);
+                    this.objData.lottieAnimation.removeEventListener("complete");
+                });
+            }
+        setTimeout(() => {
+            this.afterCompleteShow(this.slideContent, this.slideIndex, this.isPrevious);
+        }, this.introDelay);
+    };
+
+    grandeur.prototype.afterCompleteShow = function(slideContent, slideIndex, isPrevious) {
+        let pos = slideIndex % 2 ? 1 : 0;
+        let posOld = slideIndex % 2 ? 0 : 1;
+
+        let slide0Data = moodParentDiv.querySelector("[id='slide" + pos + "Parent']");
+        let slide1Data = moodParentDiv.querySelector("[id='slide" + posOld + "Parent']");
+
+        removeTransitionClassNames(slide0Data, slide1Data);
+
+        slide0Data.style.zIndex = 1;
+        slide1Data.style.zIndex = 0;
+
+        slide0Data.style.pointerEvents = "none";
+        slide1Data.style.pointerEvents = "none";
+        slideContent.style.pointerEvents = "all";
+
+        let transitionDuration = this.showSlideAnimation(transName, isStart, slide0Data, slide1Data);
+        widgetView.classList.remove("widgetViewPaused");
+        if (playMoodTransition == false) transitionDuration = 0;
+        if (this.transitionEndCallback) {
+            setTimeout(() => {
+                this.transitionEndCallback();
+                isStart = false;
+            }, transitionDuration);
+        }
+    };
+
+    grandeur.prototype.showSlideAnimation = function(transName, isStart, showSlide, hideSlide) {
+        return doTransitionAnimationCommon(showSlide, hideSlide, transName, playMoodTransition, isStart);
+    };
+
+    grandeur.prototype.transitionReplay = function() {
+        isStart = true;
+        let slide0Content = moodParentDiv.querySelector("[id='SLIDE0']");
+        if (slide0Content) {
+            slide0Content.innerHTML = "";
+            slide0Content.parentElement.style.opacity = "0";
+        }
+        let slide1Content = moodParentDiv.querySelector("[id='SLIDE1']");
+        if (slide1Content) {
+            slide1Content.innerHTML = "";
+            slide1Content.parentElement.style.opacity = "0";
+        }
+    };
+
+    grandeur.prototype.getMoodTransitionName = function() {
+        return transName;
+    };
+}

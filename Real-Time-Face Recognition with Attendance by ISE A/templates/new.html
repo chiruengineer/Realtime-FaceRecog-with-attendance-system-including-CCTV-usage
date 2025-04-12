@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Aesthetic Popover Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa; /* Light grey background */
+      padding-top: 50px; /* Top padding to avoid overlap with navbar */
+    }
+    
+    .container {
+      max-width: 600px; /* Limiting width for better readability */
+      margin: auto; /* Centering container */
+      background-color: #fff; /* White background */
+      padding: 20px; /* Padding inside container */
+      box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Soft shadow */
+      border-radius: 10px; /* Rounded corners */
+    }
+
+    .popover {
+      max-width: 300px; /* Limiting popover width */
+      background-color: #17a2b8; /* Popover background color */
+      color: #fff; /* Popover text color */
+    }
+
+    .popover-title {
+      background-color: #117a8b; /* Popover title background color */
+      color: #fff; /* Popover title text color */
+      border-bottom: none; /* Remove bottom border for title */
+      border-top-left-radius: 10px; /* Rounded top-left corner */
+      border-top-right-radius: 10px; /* Rounded top-right corner */
+    }
+
+    .popover-content {
+      padding: 10px; /* Padding inside popover content */
+    }
+
+    .popover.right > .arrow::before {
+      border-right-color: #17a2b8 !important; /* Popover arrow color */
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h3>Get Help</h3>
+  <p>Click the button below to see the popover:</p>
+  <button type="button" class="btn btn-info" data-toggle="popover" data-trigger="focus" title="Dismissible Popover" data-content="Click anywhere in the document to close this popover">Click me</button>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script>
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover({
+      container: 'body', // Ensure popover stays within body boundaries
+      placement: 'right', // Position popover on the right side of the button
+      template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
+    });   
+});
+</script>
+
+</body>
+</html>
