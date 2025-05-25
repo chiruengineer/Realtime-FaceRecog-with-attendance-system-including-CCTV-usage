@@ -50,8 +50,8 @@ def update_camera_config(ip_camera_url=None, resolution=None, fps=None):
             "ip_camera_url": "",
             "camera_settings": {
                 "resolution": {
-                    "width": 1280,
-                    "height": 720
+                    "width": 2048,
+                    "height": 1536
                 },
                 "fps": 30
             }

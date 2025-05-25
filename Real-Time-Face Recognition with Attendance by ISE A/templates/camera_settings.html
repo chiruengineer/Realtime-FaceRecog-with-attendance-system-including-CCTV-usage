@@ -8,8 +8,11 @@
     <style>
         body {
             padding: 20px;
-            background-color: #f8f9fa;
-        }
+            background: url("{{url_for('static',filename='giphy.gif')}}") no-repeat center center/cover;
+            background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;        }
         .container {
             max-width: 800px;
             margin: 0 auto;
